@@ -74,16 +74,20 @@ document.addEventListener('DOMContentLoaded', () => {
     startMonthInput.addEventListener('change', calculate);
     startMonthInput.addEventListener('input', calculate);
 
-    // Hızlı Tutar Butonları
-    document.querySelectorAll('.amount-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            targetAmountInput.value = formatNumber(parseInt(btn.dataset.val));
-            monthlyPaymentInput.value = '';
-            calculate();
+    // Hızlı Tutar Seçimi (Dropdown)
+    const quickAmountSelect = document.getElementById('quickAmountSelect');
+    if (quickAmountSelect) {
+        quickAmountSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val) {
+                targetAmountInput.value = formatNumber(parseInt(val));
+                monthlyPaymentInput.value = '';
+                calculate();
+                // Seçim yapıldıktan sonra value'yu sıfırla ki label gibi dursun veya seçili kalsın
+                // quickAmountSelect.value = ""; (isteğe bağlı)
+            }
         });
-    });
+    }
     // ── PDF İndirme ──
     const downloadPdfBtn = document.getElementById('downloadPdfBtn');
     downloadPdfBtn.addEventListener('click', () => {
@@ -109,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h1 style="color: #059669; text-align: center; margin: 0 0 5px; font-size: 22px;">Kaya</h1>
             <p style="text-align: center; color: #6b7280; font-size: 12px; margin-bottom: 15px;">Faizsiz Finansman Hesaplayıcı — ${new Date().toLocaleDateString('tr-TR')}</p>
             <div style="display: flex; gap: 15px; background: #f3f4f6; padding: 10px 15px; border-radius: 8px; font-size: 13px;">
-                <div><b>Hedef Tutar:</b> ₺${formatNumber(T)}</div>
+                <div><b>Kredi Tutarı:</b> ₺${formatNumber(T)}</div>
                 <div><b>Başlangıç:</b> ${startMonthInput.value ? new Date(startMonthInput.value).toLocaleDateString('tr-TR') : '-'}</div>
                 <div><b>Aylık Ödeme:</b> ₺${formatNumber(A)}</div>
             </div>
@@ -351,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Taksit sütununa Org. ücretini ekle
             let installmentDisplay = `₺${formatNumber(installmentAmount)}`;
             if (orgPortion > 0) {
-                installmentDisplay += `<br><span class="org-plus">+ ₺${formatNumber(orgPortion)}</span>`;
+                installmentDisplay += ` <span class="org-plus">+ ₺${formatNumber(orgPortion)}</span>`;
             }
 
             tr.innerHTML = `
