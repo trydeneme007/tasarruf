@@ -7,7 +7,7 @@
     <title>Kaya Hesaplayıcı</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
@@ -26,6 +26,7 @@
                 <span class="top-bar-title">Kaya</span>
             </div>
 
+            <!-- Hızlı Tutar Butonları (Girdilerin Üstünde) -->
             <div class="top-bar-inputs">
                 <div class="top-input">
                     <label>Hedef Tutar</label>
@@ -34,6 +35,15 @@
                         <input type="text" id="targetAmount" value="1.000.000">
                     </div>
                 </div>
+
+                <div class="quick-bar">
+                    <button type="button" class="amount-btn" data-val="1000000">1M</button>
+                    <button type="button" class="amount-btn" data-val="2000000">2M</button>
+                    <button type="button" class="amount-btn" data-val="3000000">3M</button>
+                    <button type="button" class="amount-btn" data-val="4000000">4M</button>
+                    <button type="button" class="amount-btn" data-val="5000000">5M</button>
+                </div>
+
                 <div class="top-input">
                     <label>Başlangıç</label>
                     <input type="date" id="startMonth">
@@ -54,27 +64,12 @@
             </div>
         </header>
 
-        <!-- Hızlı Tutar Butonları -->
-        <div class="quick-bar">
-            <button type="button" class="amount-btn" data-val="1000000">1M</button>
-            <button type="button" class="amount-btn" data-val="2000000">2M</button>
-            <button type="button" class="amount-btn" data-val="3000000">3M</button>
-            <button type="button" class="amount-btn" data-val="4000000">4M</button>
-            <button type="button" class="amount-btn" data-val="5000000">5M</button>
-            <button type="button" class="amount-btn" data-val="6000000">6M</button>
-            <button type="button" class="amount-btn" data-val="7000000">7M</button>
-            <button type="button" class="amount-btn" data-val="8000000">8M</button>
-            <button type="button" class="amount-btn" data-val="9000000">9M</button>
-            <button type="button" class="amount-btn" data-val="10000000">10M</button>
-        </div>
+
 
         <!-- Gelişmiş Ayarlar Panel -->
         <div class="advanced-panel" id="advancedSettings" style="display: none;">
             <div class="adv-grid">
-                <div class="adv-item">
-                    <label>Toplam Vade</label>
-                    <input type="text" id="totalTerm" disabled class="readonly-input">
-                </div>
+
                 <div class="adv-item">
                     <label>Teslim Şartı: <span id="deliveryConditionLabel">%40</span></label>
                     <input type="range" id="deliveryCondition" min="10" max="100" step="1" value="40">
@@ -95,9 +90,9 @@
                     <thead>
                         <tr>
                             <th>Ödeme</th>
-                            <th>Teslim</th>
-                            <th>Vade</th>
-                            <th>Oran</th>
+                            <th>Tsl</th>
+                            <th>Vde</th>
+                            <th>%</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -168,11 +163,12 @@
                         <table class="payment-plan-table">
                             <thead>
                                 <tr>
-                                    <th class="col-no">Taksit No</th>
-                                    <th class="col-date">Ödeme Tarihi</th>
-                                    <th class="col-amount">Taksit Tutarı</th>
-                                    <th class="col-cumulative">Toplam Ödenen</th>
-                                    <th class="col-remaining">Kalan Borç</th>
+                                    <th class="col-no">No</th>
+                                    <th class="col-date">Tarih</th>
+                                    <th class="col-amount">Taksit</th>
+                                    <th class="col-month-total">Toplam</th>
+                                    <th class="col-cumulative">Ödenen</th>
+                                    <th class="col-remaining">Kalan</th>
                                 </tr>
                             </thead>
                             <tbody id="paymentPlanBody">
