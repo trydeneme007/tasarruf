@@ -23,8 +23,7 @@
 
 html,
 body {
-    height: 100%;
-    overflow: hidden;
+    min-height: 100vh;
     background: var(--bg-color);
     color: var(--text-main);
     -webkit-font-smoothing: antialiased;
@@ -32,13 +31,12 @@ body {
 
 /* ── Ana Container: Viewport'a sığmalı ── */
 .app-container {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     padding: 0.5vh 1vw;
     max-width: 1400px;
     margin: 0 auto;
-    overflow: hidden;
 }
 
 /* ══════════════════════════════════
@@ -51,8 +49,18 @@ body {
     background: var(--card-bg);
     padding: 0.6vh 1vw;
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+    border: 2px solid #111827;
+    /* Siyah, net çerçeve */
     flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+.top-bar-main {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 1vw;
 }
 
 .top-bar-left {
@@ -184,35 +192,49 @@ input[type="date"]:focus {
     background: var(--primary-dark);
 }
 
-/* ── Hızlı Tutarlar ── */
-.quick-bar {
+/* ── Hızlı Tutarlar Seçimi (Select) ── */
+.amount-select {
+    width: 100%;
+    padding: 0.4vh 0.5vw;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: clamp(0.65rem, 0.9vw, 0.95rem);
+    font-weight: 600;
+    color: var(--text-main);
+    background-color: var(--card-bg);
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2310b981%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: .65em auto, 100%;
+}
+
+.amount-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.combined-wrapper {
     display: flex;
-    gap: 0.3vw;
-    padding: 0.4vh 0;
+}
+
+.combined-wrapper input {
+    border-radius: 6px 0 0 6px !important;
+    font-size: clamp(0.55rem, 0.75vw, 0.85rem) !important;
+    /* Biraz daha küçültüldü */
+}
+
+.combined-wrapper select {
+    border-radius: 0 6px 6px 0 !important;
+    border-left: none !important;
+    width: auto !important;
     flex-shrink: 0;
 }
 
-.amount-btn {
-    flex: 1;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    color: var(--text-main);
-    border-radius: 50px;
-    padding: 0.3vh 0;
-    font-size: clamp(0.55rem, 0.7vw, 0.75rem);
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.amount-btn:hover,
-.amount-btn.active {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
-}
 
 /* ── Gelişmiş Panel ── */
 .advanced-panel {
@@ -222,6 +244,7 @@ input[type="date"]:focus {
     box-shadow: var(--shadow);
     flex-shrink: 0;
     margin-bottom: 0.3vh;
+    flex-basis: 100%;
 }
 
 .adv-grid {
@@ -270,23 +293,53 @@ input[type="range"]::-webkit-slider-thumb {
 .main-grid {
     flex: 1;
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    /* 3'lü kolon planlaması yapıldı, ancak içerik payment-plan geldiğinde grid kendisi esneyecek. Şimdilik 1fr 2.2fr yapıp yan yana dizeceğiz. */
+    grid-template-columns: 1.2fr 2fr;
     gap: 0.8vw;
     min-height: 0;
-    overflow: hidden;
 }
 
 /* ── Plan Tablosu ── */
 .plans-section {
     background: var(--card-bg);
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow-y: auto;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+    border: 2px solid #111827;
+    /* Siyah, net çerçeve */
+    overflow-y: visible;
+    /* Kutu içi scroll yerine tüm sayfa uzayacak */
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    /* Izgaranın (grid) yükseklik boyutuna göre esnemesini durdurup, kendi satırı kadar yer kaplamasını sağlar */
+}
+
+/* ── Standart Başlıklar ── */
+.plans-header,
+.payment-plan-header,
+.summary-box-title {
+    font-size: clamp(0.75rem, 0.95vw, 1.1rem);
+    font-weight: 700;
+    padding: 0.8vh 1vw;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    margin: 0;
+    flex-shrink: 0;
+    border-bottom: 2px solid #111827;
+    /* Başlık altı siyah çizgi ayracı */
+}
+
+/* Özet Başlığı - Kutu içinde sıfıra-sıfır (edge-to-edge) görünüm için ekstra margin kompanzasyonu */
+/* Artık padding olmadığı için negatif margin'e gerek yok */
+.summary-box-title {
+    margin: 0 0 1vh 0;
 }
 
 .plans-table {
     width: 100%;
+    table-layout: fixed;
+    /* Masaüstünde tablo kendini sütunlara eşit dağıtarak %100 yayar */
     border-collapse: collapse;
     font-size: clamp(0.6rem, 0.8vw, 0.85rem);
 }
@@ -303,7 +356,8 @@ input[type="range"]::-webkit-slider-thumb {
     font-size: clamp(0.55rem, 0.7vw, 0.75rem);
     font-weight: 600;
     color: var(--text-muted);
-    text-align: left;
+    text-align: center;
+    /* Sağdaki dev boşluğun kalkmasıyla yazılar tekrar ortalandı */
     border-bottom: 2px solid var(--border);
     white-space: nowrap;
 }
@@ -312,6 +366,8 @@ input[type="range"]::-webkit-slider-thumb {
     padding: 0.4vh 0.5vw;
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
+    text-align: center;
+    /* Sütun genişlediğinde içerik sola yaslanıp boşluk bırakmasın diye tam ortalanıyor */
 }
 
 .plans-table tbody tr {
@@ -359,16 +415,58 @@ input[type="range"]::-webkit-slider-thumb {
 /* ── Özet Panel ── */
 .summary-section {
     display: flex;
+    flex-direction: row;
+    /* Masaüstünde yan yana dizecek (Özet ve Tablo) */
+    gap: 0.8vw;
+    align-items: flex-start;
+}
+
+.summary-left-col {
+    display: flex;
     flex-direction: column;
     gap: 0.5vh;
-    overflow-y: auto;
+    flex: 1;
 }
+
+.summary-box {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+    border: 2px solid #111827;
+    /* Siyah, net çerçeve */
+    padding: 0;
+    /* Padding kaldırıldı, standartlaştırıldı */
+    margin-bottom: 2vh;
+    overflow: hidden;
+    /* Taşan başlığı oval arka planla kesmek için */
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-content {
+    padding: 1vw;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vh;
+}
+
+/* Özet Panel Başlığı stili üst kısımda birleştirildi */
 
 .summary-card {
     background: var(--card-bg);
     border-radius: var(--radius);
     padding: 0.6vh 0.8vw;
-    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    /* Çerçeve eklendi */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+    /* Gölge belirginleştirildi */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    /* Hover olunca yukarı kalkma / gölge büyümesi */
 }
 
 .summary-card.highlight {
@@ -422,7 +520,8 @@ input[type="range"]::-webkit-slider-thumb {
     flex-direction: column;
     gap: 0.5vh;
     padding-top: 0.3vh;
-    border-top: 1px solid var(--border);
+    border-top: none;
+    /* Eskiden 1px border vardı, kaldırıldı */
 }
 
 /* ── Progress Bar ── */
@@ -446,46 +545,56 @@ input[type="range"]::-webkit-slider-thumb {
 .payment-plan-section {
     background: var(--card-bg);
     border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
     overflow: hidden;
-    margin-top: 1vh;
-    border: 1px solid var(--border);
+    margin-top: 0;
+    /* Yan yana olduğu için üstten margin kalktı */
+    border: 2px solid #111827;
+    /* Siyah, net çerçeve */
+    flex: 1.2;
+    /* Özet kutusundan daha geniş bir dağılım alır */
 }
 
-.payment-plan-header {
-    font-size: clamp(0.6rem, 0.75vw, 0.85rem);
-    font-weight: 600;
-    padding: 0.5vh 0.6vw;
-    background: var(--primary-light);
-    color: var(--primary-dark);
-}
+/* Detaylı Plan Başlığı stili üst kısımda birleştirildi */
 
 .payment-plan-scroll {
-    max-height: 45vh;
-    overflow-y: auto;
+    max-height: none;
+    /* Mobilde veya dar ekranda 20 satırı kaydırmasız göstermek için iptal edildi */
+    overflow-y: visible;
+    /* İçerik taşsa bile kendi kutusunda değil, tüm sayfada kaydırılacak */
+    overflow-x: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .payment-plan-table {
     width: 100%;
+    min-width: 600px;
     border-collapse: collapse;
     font-size: clamp(0.5rem, 0.6vw, 0.7rem);
     font-variant-numeric: tabular-nums;
+    table-layout: fixed;
+    /* Eşit ve sabit dağıtım güvencesi */
 }
 
 .payment-plan-table thead {
     position: sticky;
     top: 0;
     z-index: 5;
+    background: var(--card-bg);
+    /* Üst tabloyla aynı beyaz arkaplan */
 }
 
 .payment-plan-table th {
-    padding: 0.4vh 0.4vw;
+    padding: 0.5vh 0.5vw;
     font-weight: 600;
-    color: var(--primary-dark);
-    text-align: left;
-    background: var(--primary-light);
-    border-bottom: 2px solid var(--primary);
-    font-size: clamp(0.45rem, 0.55vw, 0.65rem);
+    color: var(--text-muted);
+    /* Üst tabloyla aynı gri font */
+    text-align: center;
+    /* Sağ/sol dengesizliğini giderip tüm sütunları görselde eşitler */
+    border-bottom: 2px solid var(--border);
+    font-size: clamp(0.55rem, 0.7vw, 0.75rem);
+    white-space: nowrap;
 }
 
 .payment-plan-table td {
@@ -493,20 +602,22 @@ input[type="range"]::-webkit-slider-thumb {
     border-bottom: 1px solid var(--border);
     font-size: clamp(0.5rem, 0.6vw, 0.7rem);
     color: var(--text-main);
+    text-align: center;
+    /* İçerikler ortalanıyor */
 }
 
 .payment-plan-table .col-no {
-    width: 5%;
+    width: 10%;
     text-align: center;
     color: var(--text-muted);
 }
 
 .payment-plan-table .col-date {
-    width: 16%;
+    width: 18%;
 }
 
 .payment-plan-table .col-amount {
-    width: 25%;
+    width: 18%;
 }
 
 .org-plus {
@@ -517,16 +628,18 @@ input[type="range"]::-webkit-slider-thumb {
 
 @media (max-width: 768px) {
     .org-plus {
-        display: block;
+        display: inline-block;
+        /* Mobilde de rakamlar yan yana kalsın (block olduğunda alt satıra itiyordu) */
         font-size: 0.8em;
-        margin-top: 1px;
+        margin-left: 2px;
     }
 }
 
 .payment-plan-table .col-month-total {
-    width: 16%;
+    width: 18%;
     color: var(--primary-dark);
     font-weight: 700;
+    text-align: center;
 }
 
 .payment-plan-table .col-cumulative {
@@ -534,18 +647,16 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .payment-plan-table .col-remaining {
-    width: 20%;
+    width: 18%;
 }
 
+.payment-plan-table .col-amount,
+.payment-plan-table .col-month-total,
 .payment-plan-table .col-cumulative,
 .payment-plan-table .col-remaining {
     font-weight: 500;
-}
-
-.payment-plan-table .col-cumulative,
-.payment-plan-table .col-remaining {
-    font-weight: 500;
-    text-align: right;
+    text-align: center;
+    /* Rakamların hepsi tam ortaya, sağır kalan boşluk hissini engeller */
     font-family: 'Inter', monospace;
 }
 
@@ -609,63 +720,59 @@ input[type="range"]::-webkit-slider-thumb {
     .app-container {
         height: auto;
         overflow: visible;
-        padding: 6px;
-        gap: 8px;
+        padding: 10px;
+        gap: 10px;
+        /* Tüm genel kutu arası boşluk standart 10px */
     }
 
     /* ── Üst Çubuk ── */
     .top-bar {
-        flex-direction: column;
-        padding: 12px;
-        gap: 8px;
-        border-radius: 12px;
-        position: relative;
-        background: var(--card-bg);
-        box-shadow: var(--shadow-sm);
-        border: none;
-        margin-bottom: 20px;
-    }
-
-    .top-bar-left {
-        width: 100%;
+        flex-direction: row;
+        align-items: flex-end;
+        padding: 10px 8px;
         gap: 6px;
-    }
-
-    .top-bar-title {
-        font-size: 0.8rem;
-    }
-
-    .logo-icon {
-        width: 18px;
-        height: 18px;
+        border-radius: 10px;
+        background: var(--card-bg);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+        /* Belirgin mobil gölge */
+        border: 2px solid #111827;
+        /* Mobilde de siyah çerçeve */
+        margin-bottom: 0;
+        /* Boşluk gap ile verileceği için fazladan margin silindi */
+        overflow-x: auto;
     }
 
     .top-bar-adv {
-        position: absolute;
-        right: 8px;
-        top: 8px;
+        display: flex;
         gap: 4px;
+        flex-shrink: 0;
+        margin-bottom: 2px;
+    }
+
+    .top-bar-main {
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 6px;
     }
 
     .top-bar-inputs {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4px;
-        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 6px;
+        flex: 1;
+        min-width: 0;
     }
 
     .top-input {
-        width: 100%;
-    }
-
-    .top-input:nth-child(3) {
-        grid-column: 1 / -1;
+        min-width: 0;
     }
 
     .top-input label {
-        font-size: 0.6rem;
-        margin-bottom: 1px;
+        font-size: 0.55rem;
+        margin-bottom: 2px;
         color: var(--text-muted);
+        white-space: nowrap;
     }
 
     .input-wrapper {
@@ -674,13 +781,14 @@ input[type="range"]::-webkit-slider-thumb {
 
     .currency {
         left: 6px;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
     }
 
     input[type="text"],
     input[type="number"] {
         padding: 5px 6px 5px 20px;
-        font-size: 0.78rem;
+        font-size: 0.7rem;
+        /* Sığması için Mobilde daha küçük */
         border-radius: 5px;
         min-height: 30px;
     }
@@ -706,23 +814,12 @@ input[type="range"]::-webkit-slider-thumb {
         border-radius: 5px;
     }
 
-    /* ── Hızlı Tutar Butonları ── */
-    .quick-bar {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-        padding: 6px 4px;
-        background: var(--card-bg);
-        border-radius: 10px;
-        border: 1px solid var(--border);
-    }
-
-    .amount-btn {
-        flex: 1 0 auto;
-        padding: 4px 8px;
-        font-size: 0.62rem;
-        border-radius: 4px;
-        min-height: 24px;
+    /* ── Hızlı Tutar Seçimi Mobilde ── */
+    .amount-select {
+        padding: 5px 6px;
+        font-size: 0.78rem;
+        min-height: 30px;
+        background-position: right .5em top 50%, 0 0;
     }
 
     /* ── Gelişmiş Panel ── */
@@ -753,7 +850,8 @@ input[type="range"]::-webkit-slider-thumb {
     /* ── Ana Grid ── */
     .main-grid {
         grid-template-columns: 1fr;
-        gap: 8px;
+        gap: 10px;
+        /* Standart boşluk */
         overflow: visible;
     }
 
@@ -762,7 +860,11 @@ input[type="range"]::-webkit-slider-thumb {
         max-height: none;
         border-radius: 10px;
         overflow-x: auto;
-        border: 1px solid var(--border);
+        border: 2px solid #111827;
+        /* Mobilde siyah çerçeve */
+        align-self: stretch;
+        /* Mobilde daralmaması ve tüm ekrana yayılması için */
+        width: 100%;
     }
 
     .plans-table {
@@ -825,10 +927,20 @@ input[type="range"]::-webkit-slider-thumb {
 
     /* ── Özet Panel ── */
     .summary-section {
-        gap: 6px;
-        margin-top: 20px;
-        padding-top: 12px;
-        border-top: 2px solid #555;
+        gap: 10px;
+        flex-direction: column;
+    }
+
+    .summary-left-col,
+    .payment-plan-section {
+        flex: none;
+        width: 100%;
+        /* Mobilde daralmaları önlemek için flex iptali ve tam genişlik */
+    }
+
+    .summary-box {
+        margin-bottom: 0;
+        /* Ana gap'e bırakmak için, standart fazlalık temizlendi */
     }
 
     .summary-card {
@@ -882,12 +994,12 @@ input[type="range"]::-webkit-slider-thumb {
 
     /* ── Ödeme Planı Tablosu ── */
     .payment-plan-section {
-        border-radius: 12px;
-        margin-top: 20px;
+        border-radius: var(--radius);
+        margin-top: 0;
+        /* Gap zaten 10px boşluk veriyor, uyumlu yapıldı */
         padding-top: 0;
-        box-shadow: var(--shadow-sm);
-        border: none;
-        border-top: 2px solid #555;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04);
+        border: 2px solid #111827;
     }
 
     .payment-plan-header {
