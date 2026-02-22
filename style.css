@@ -9,15 +9,16 @@
     --border: #e5e7eb;
     --danger: #ef4444;
     --danger-light: #fee2e2;
-    --radius: 10px;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --radius: 12px;
+    --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', sans-serif;
 }
 
 html,
@@ -196,12 +197,12 @@ input[type="date"]:focus {
     background: var(--card-bg);
     border: 1px solid var(--border);
     color: var(--text-main);
-    border-radius: 5px;
-    padding: 0.25vh 0;
+    border-radius: 50px;
+    padding: 0.3vh 0;
     font-size: clamp(0.55rem, 0.7vw, 0.75rem);
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .amount-btn:hover,
@@ -209,6 +210,8 @@ input[type="date"]:focus {
     background: var(--primary);
     border-color: var(--primary);
     color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 /* ── Gelişmiş Panel ── */
@@ -493,11 +496,52 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .payment-plan-table .col-no {
+    width: 5%;
     text-align: center;
     color: var(--text-muted);
 }
 
-.payment-plan-table .col-amount,
+.payment-plan-table .col-date {
+    width: 16%;
+}
+
+.payment-plan-table .col-amount {
+    width: 25%;
+}
+
+.org-plus {
+    color: var(--primary);
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .org-plus {
+        display: block;
+        font-size: 0.8em;
+        margin-top: 1px;
+    }
+}
+
+.payment-plan-table .col-month-total {
+    width: 16%;
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+.payment-plan-table .col-cumulative {
+    width: 18%;
+}
+
+.payment-plan-table .col-remaining {
+    width: 20%;
+}
+
+.payment-plan-table .col-cumulative,
+.payment-plan-table .col-remaining {
+    font-weight: 500;
+}
+
 .payment-plan-table .col-cumulative,
 .payment-plan-table .col-remaining {
     font-weight: 500;
@@ -565,7 +609,7 @@ input[type="range"]::-webkit-slider-thumb {
     .app-container {
         height: auto;
         overflow: visible;
-        padding: 10px;
+        padding: 6px;
         gap: 8px;
     }
 
@@ -573,39 +617,40 @@ input[type="range"]::-webkit-slider-thumb {
     .top-bar {
         flex-direction: column;
         padding: 12px;
-        gap: 10px;
+        gap: 8px;
         border-radius: 12px;
+        position: relative;
+        background: var(--card-bg);
+        box-shadow: var(--shadow-sm);
+        border: none;
+        margin-bottom: 20px;
     }
 
     .top-bar-left {
         width: 100%;
-        justify-content: space-between;
-        gap: 8px;
+        gap: 6px;
     }
 
     .top-bar-title {
-        font-size: 1rem;
+        font-size: 0.8rem;
     }
 
     .logo-icon {
-        width: 22px;
-        height: 22px;
+        width: 18px;
+        height: 18px;
     }
 
     .top-bar-adv {
         position: absolute;
-        right: 12px;
-        top: 12px;
-        gap: 6px;
-    }
-
-    .top-bar {
-        position: relative;
+        right: 8px;
+        top: 8px;
+        gap: 4px;
     }
 
     .top-bar-inputs {
-        flex-direction: column;
-        gap: 8px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
         width: 100%;
     }
 
@@ -613,9 +658,13 @@ input[type="range"]::-webkit-slider-thumb {
         width: 100%;
     }
 
+    .top-input:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+
     .top-input label {
-        font-size: 0.75rem;
-        margin-bottom: 3px;
+        font-size: 0.6rem;
+        margin-bottom: 1px;
         color: var(--text-muted);
     }
 
@@ -624,97 +673,100 @@ input[type="range"]::-webkit-slider-thumb {
     }
 
     .currency {
-        left: 10px;
-        font-size: 0.9rem;
+        left: 6px;
+        font-size: 0.7rem;
     }
 
     input[type="text"],
     input[type="number"] {
-        padding: 10px 12px 10px 28px;
-        font-size: 1rem;
-        border-radius: 8px;
-        min-height: 44px;
+        padding: 5px 6px 5px 20px;
+        font-size: 0.78rem;
+        border-radius: 5px;
+        min-height: 30px;
     }
 
     input[type="date"] {
-        padding: 10px 12px;
-        font-size: 0.95rem;
-        border-radius: 8px;
-        min-height: 44px;
+        padding: 5px 6px;
+        font-size: 0.75rem;
+        border-radius: 5px;
+        min-height: 30px;
     }
 
     .pdf-btn {
-        padding: 6px 12px;
-        font-size: 0.75rem;
-        border-radius: 8px;
-        min-height: 36px;
+        padding: 3px 8px;
+        font-size: 0.6rem;
+        border-radius: 5px;
+        min-height: 26px;
     }
 
     .adv-btn {
-        padding: 6px 10px;
-        font-size: 1rem;
-        min-height: 36px;
-        border-radius: 8px;
+        padding: 3px 6px;
+        font-size: 0.8rem;
+        min-height: 26px;
+        border-radius: 5px;
     }
 
     /* ── Hızlı Tutar Butonları ── */
     .quick-bar {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
-        padding: 6px 0;
-        justify-content: flex-start;
+        gap: 4px;
+        padding: 6px 4px;
+        background: var(--card-bg);
+        border-radius: 10px;
+        border: 1px solid var(--border);
     }
 
     .amount-btn {
-        flex: 0 0 auto;
-        padding: 8px 14px;
-        font-size: 0.8rem;
-        border-radius: 8px;
-        min-height: 36px;
+        flex: 1 0 auto;
+        padding: 4px 8px;
+        font-size: 0.62rem;
+        border-radius: 4px;
+        min-height: 24px;
     }
 
     /* ── Gelişmiş Panel ── */
     .advanced-panel {
-        padding: 12px;
-        border-radius: 12px;
+        padding: 8px;
+        border-radius: 8px;
     }
 
     .adv-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 6px;
     }
 
     .adv-item label {
-        font-size: 0.8rem;
+        font-size: 0.65rem;
     }
 
     input[type="range"] {
-        height: 6px;
-        margin-top: 4px;
+        height: 4px;
+        margin-top: 2px;
     }
 
     input[type="range"]::-webkit-slider-thumb {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
     }
 
     /* ── Ana Grid ── */
     .main-grid {
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 8px;
         overflow: visible;
     }
 
     /* ── Plan Tablosu ── */
     .plans-section {
         max-height: none;
-        border-radius: 12px;
+        border-radius: 10px;
         overflow-x: auto;
+        border: 1px solid var(--border);
     }
 
     .plans-table {
-        font-size: 0.82rem;
+        font-size: 0.68rem;
         min-width: 100%;
     }
 
@@ -722,20 +774,25 @@ input[type="range"]::-webkit-slider-thumb {
         background: var(--card-bg);
     }
 
+    .plans-table {
+        width: auto !important;
+        margin: 0 auto;
+    }
+
     .plans-table th {
-        padding: 10px 8px;
-        font-size: 0.72rem;
+        padding: 3px 2px;
+        font-size: 0.52rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.02em;
         color: var(--text-muted);
         white-space: nowrap;
     }
 
     .plans-table td {
-        padding: 10px 8px;
+        padding: 3px 2px;
         vertical-align: middle;
         white-space: nowrap;
+        font-size: 0.65rem;
     }
 
     .plans-table tbody tr {
@@ -747,84 +804,95 @@ input[type="range"]::-webkit-slider-thumb {
     }
 
     .plan-select-btn {
-        padding: 6px 14px;
-        font-size: 0.78rem;
-        border-radius: 6px;
-        min-height: 32px;
+        padding: 3px 8px;
+        font-size: 0.6rem;
+        border-radius: 4px;
+        min-height: 22px;
         white-space: nowrap;
     }
 
     .ratio-badge {
-        padding: 3px 8px;
-        font-size: 0.72rem;
-        border-radius: 6px;
+        padding: 2px 5px;
+        font-size: 0.58rem;
+        border-radius: 4px;
     }
 
     .date-sub {
-        font-size: 0.62rem;
-        margin-top: 2px;
+        font-size: 0.5rem;
+        margin-top: 1px;
         color: var(--text-muted);
     }
 
     /* ── Özet Panel ── */
     .summary-section {
-        gap: 8px;
+        gap: 6px;
+        margin-top: 20px;
+        padding-top: 12px;
+        border-top: 2px solid #555;
     }
 
     .summary-card {
-        padding: 14px 16px;
+        padding: 12px;
         border-radius: 12px;
+        background: var(--card-bg);
+        box-shadow: var(--shadow-sm);
+        border: none;
     }
 
     .summary-card.highlight {
-        padding: 16px;
-        border-radius: 12px;
+        padding: 12px;
+        border-radius: 10px;
+        border: none;
     }
 
     .summary-label {
-        font-size: 0.78rem;
-        margin-bottom: 2px;
+        font-size: 0.6rem;
+        margin-bottom: 1px;
     }
 
     .summary-value {
-        font-size: 1.25rem;
+        font-size: 0.9rem;
         font-weight: 700;
     }
 
     .summary-row {
         grid-template-columns: 1fr 1fr;
-        gap: 8px;
+        gap: 6px;
     }
 
     .summary-extended {
-        gap: 8px;
-        padding-top: 8px;
+        gap: 4px;
+        padding-top: 4px;
     }
 
     .summary-card.total-cost {
-        border-left-width: 4px;
+        border-left-width: 3px;
     }
 
     .summary-card.total-cost .summary-value {
-        font-size: 1.3rem;
+        font-size: 0.95rem;
     }
 
     /* ── Progress Bar ── */
     .progress-bar-container {
-        height: 5px;
-        margin-top: 8px;
-        border-radius: 3px;
+        height: 3px;
+        margin-top: 4px;
+        border-radius: 2px;
     }
 
     /* ── Ödeme Planı Tablosu ── */
     .payment-plan-section {
         border-radius: 12px;
-        margin-top: 8px;
+        margin-top: 20px;
+        padding-top: 0;
+        box-shadow: var(--shadow-sm);
+        border: none;
+        border-top: 2px solid #555;
     }
 
     .payment-plan-header {
-        font-size: 0.85rem;
-        padding: 12px 14px;
+        font-size: 0.7rem;
+        padding: 6px 8px;
     }
 
     .payment-plan-scroll {
@@ -833,42 +901,60 @@ input[type="range"]::-webkit-slider-thumb {
     }
 
     .payment-plan-table {
-        font-size: 0.72rem;
-        min-width: 480px;
+        font-size: 0.5rem;
+        width: auto !important;
+        min-width: auto;
+        margin: 0 auto;
+        table-layout: auto;
     }
 
     .payment-plan-table th {
-        padding: 8px 10px;
-        font-size: 0.68rem;
+        padding: 2px 2px;
+        font-size: 0.46rem;
         font-weight: 700;
         white-space: nowrap;
     }
 
     .payment-plan-table td {
-        padding: 8px 10px;
-        font-size: 0.75rem;
+        padding: 3px 2px;
+        font-size: 0.5rem;
         white-space: nowrap;
     }
 
+    .payment-plan-table .col-amount {
+        white-space: normal;
+        line-height: 1.1;
+    }
+
     .payment-plan-table .col-no {
-        min-width: 40px;
+        width: 14px;
     }
 
     .payment-plan-table .col-date {
-        min-width: 100px;
+        width: 50px;
     }
 
-    .payment-plan-table .col-amount,
-    .payment-plan-table .col-cumulative,
+    .payment-plan-table .col-amount {
+        width: 75px;
+    }
+
+    .payment-plan-table .col-month-total {
+        width: 50px;
+    }
+
+    .payment-plan-table .col-cumulative {
+        width: 50px;
+    }
+
     .payment-plan-table .col-remaining {
-        min-width: 90px;
+        width: 50px;
     }
 
     /* ── Warning Box ── */
     .warning-box {
-        padding: 10px 14px;
-        font-size: 0.8rem;
-        border-radius: 10px;
+        padding: 6px 8px;
+        font-size: 0.65rem;
+        border-radius: 6px;
     }
 
     /* ── Scrollbar (mobilde gizle) ── */
@@ -883,46 +969,5 @@ input[type="range"]::-webkit-slider-thumb {
     .payment-plan-scroll {
         -ms-overflow-style: none;
         scrollbar-width: none;
-    }
-}
-
-/* ── Çok küçük ekranlar ── */
-@media (max-width: 380px) {
-
-    .app-container {
-        padding: 6px;
-    }
-
-    .top-bar {
-        padding: 10px;
-    }
-
-    input[type="text"],
-    input[type="number"] {
-        font-size: 0.9rem;
-        padding: 8px 10px 8px 24px;
-    }
-
-    input[type="date"] {
-        font-size: 0.85rem;
-        padding: 8px 10px;
-    }
-
-    .amount-btn {
-        padding: 6px 10px;
-        font-size: 0.72rem;
-    }
-
-    .summary-value {
-        font-size: 1.1rem;
-    }
-
-    .plans-table th,
-    .plans-table td {
-        padding: 8px 6px;
-    }
-
-    .payment-plan-table {
-        min-width: 420px;
     }
 }
