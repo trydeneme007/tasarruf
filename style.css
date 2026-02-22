@@ -565,18 +565,47 @@ input[type="range"]::-webkit-slider-thumb {
     .app-container {
         height: auto;
         overflow: visible;
-        padding: 0.5rem;
+        padding: 10px;
+        gap: 8px;
+    }
+
+    /* ── Üst Çubuk ── */
+    .top-bar {
+        flex-direction: column;
+        padding: 12px;
+        gap: 10px;
+        border-radius: 12px;
+    }
+
+    .top-bar-left {
+        width: 100%;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .top-bar-title {
+        font-size: 1rem;
+    }
+
+    .logo-icon {
+        width: 22px;
+        height: 22px;
+    }
+
+    .top-bar-adv {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        gap: 6px;
     }
 
     .top-bar {
-        flex-wrap: wrap;
-        padding: 0.5rem;
-        gap: 0.5rem;
+        position: relative;
     }
 
     .top-bar-inputs {
         flex-direction: column;
-        gap: 0.4rem;
+        gap: 8px;
         width: 100%;
     }
 
@@ -585,79 +614,315 @@ input[type="range"]::-webkit-slider-thumb {
     }
 
     .top-input label {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
+        margin-bottom: 3px;
+        color: var(--text-muted);
+    }
+
+    .input-wrapper {
+        width: 100%;
+    }
+
+    .currency {
+        left: 10px;
+        font-size: 0.9rem;
     }
 
     input[type="text"],
     input[type="number"] {
-        padding: 0.5rem 0.5rem 0.5rem 1.5rem;
-        font-size: 0.85rem;
+        padding: 10px 12px 10px 28px;
+        font-size: 1rem;
+        border-radius: 8px;
+        min-height: 44px;
     }
 
     input[type="date"] {
-        padding: 0.5rem;
-        font-size: 0.85rem;
+        padding: 10px 12px;
+        font-size: 0.95rem;
+        border-radius: 8px;
+        min-height: 44px;
     }
 
+    .pdf-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        border-radius: 8px;
+        min-height: 36px;
+    }
+
+    .adv-btn {
+        padding: 6px 10px;
+        font-size: 1rem;
+        min-height: 36px;
+        border-radius: 8px;
+    }
+
+    /* ── Hızlı Tutar Butonları ── */
     .quick-bar {
+        display: flex;
         flex-wrap: wrap;
-        gap: 0.3rem;
-        padding: 0.3rem 0;
+        gap: 6px;
+        padding: 6px 0;
+        justify-content: flex-start;
     }
 
     .amount-btn {
         flex: 0 0 auto;
-        padding: 0.3rem 0.6rem;
-        font-size: 0.7rem;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+        min-height: 36px;
+    }
+
+    /* ── Gelişmiş Panel ── */
+    .advanced-panel {
+        padding: 12px;
+        border-radius: 12px;
     }
 
     .adv-grid {
         grid-template-columns: 1fr;
-        gap: 0.5rem;
+        gap: 12px;
     }
 
+    .adv-item label {
+        font-size: 0.8rem;
+    }
+
+    input[type="range"] {
+        height: 6px;
+        margin-top: 4px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* ── Ana Grid ── */
     .main-grid {
         grid-template-columns: 1fr;
-        gap: 0.5rem;
+        gap: 10px;
         overflow: visible;
     }
 
+    /* ── Plan Tablosu ── */
     .plans-section {
-        max-height: 50vh;
+        max-height: none;
+        border-radius: 12px;
+        overflow-x: auto;
     }
 
     .plans-table {
+        font-size: 0.82rem;
+        min-width: 100%;
+    }
+
+    .plans-table thead {
+        background: var(--card-bg);
+    }
+
+    .plans-table th {
+        padding: 10px 8px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+
+    .plans-table td {
+        padding: 10px 8px;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .plans-table tbody tr {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .plans-table tbody tr:active {
+        background: rgba(16, 185, 129, 0.08);
+    }
+
+    .plan-select-btn {
+        padding: 6px 14px;
+        font-size: 0.78rem;
+        border-radius: 6px;
+        min-height: 32px;
+        white-space: nowrap;
+    }
+
+    .ratio-badge {
+        padding: 3px 8px;
+        font-size: 0.72rem;
+        border-radius: 6px;
+    }
+
+    .date-sub {
+        font-size: 0.62rem;
+        margin-top: 2px;
+        color: var(--text-muted);
+    }
+
+    /* ── Özet Panel ── */
+    .summary-section {
+        gap: 8px;
+    }
+
+    .summary-card {
+        padding: 14px 16px;
+        border-radius: 12px;
+    }
+
+    .summary-card.highlight {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .summary-label {
+        font-size: 0.78rem;
+        margin-bottom: 2px;
+    }
+
+    .summary-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .summary-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .summary-extended {
+        gap: 8px;
+        padding-top: 8px;
+    }
+
+    .summary-card.total-cost {
+        border-left-width: 4px;
+    }
+
+    .summary-card.total-cost .summary-value {
+        font-size: 1.3rem;
+    }
+
+    /* ── Progress Bar ── */
+    .progress-bar-container {
+        height: 5px;
+        margin-top: 8px;
+        border-radius: 3px;
+    }
+
+    /* ── Ödeme Planı Tablosu ── */
+    .payment-plan-section {
+        border-radius: 12px;
+        margin-top: 8px;
+    }
+
+    .payment-plan-header {
+        font-size: 0.85rem;
+        padding: 12px 14px;
+    }
+
+    .payment-plan-scroll {
+        max-height: none;
+        overflow-x: auto;
+    }
+
+    .payment-plan-table {
+        font-size: 0.72rem;
+        min-width: 480px;
+    }
+
+    .payment-plan-table th {
+        padding: 8px 10px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .payment-plan-table td {
+        padding: 8px 10px;
         font-size: 0.75rem;
+        white-space: nowrap;
+    }
+
+    .payment-plan-table .col-no {
+        min-width: 40px;
+    }
+
+    .payment-plan-table .col-date {
+        min-width: 100px;
+    }
+
+    .payment-plan-table .col-amount,
+    .payment-plan-table .col-cumulative,
+    .payment-plan-table .col-remaining {
+        min-width: 90px;
+    }
+
+    /* ── Warning Box ── */
+    .warning-box {
+        padding: 10px 14px;
+        font-size: 0.8rem;
+        border-radius: 10px;
+    }
+
+    /* ── Scrollbar (mobilde gizle) ── */
+    .plans-section::-webkit-scrollbar,
+    .summary-section::-webkit-scrollbar,
+    .payment-plan-scroll::-webkit-scrollbar {
+        display: none;
+    }
+
+    .plans-section,
+    .summary-section,
+    .payment-plan-scroll {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+/* ── Çok küçük ekranlar ── */
+@media (max-width: 380px) {
+
+    .app-container {
+        padding: 6px;
+    }
+
+    .top-bar {
+        padding: 10px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        font-size: 0.9rem;
+        padding: 8px 10px 8px 24px;
+    }
+
+    input[type="date"] {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+    }
+
+    .amount-btn {
+        padding: 6px 10px;
+        font-size: 0.72rem;
+    }
+
+    .summary-value {
+        font-size: 1.1rem;
     }
 
     .plans-table th,
     .plans-table td {
-        padding: 0.4rem 0.3rem;
+        padding: 8px 6px;
     }
 
-    .summary-section {
-        gap: 0.4rem;
-    }
-
-    .summary-card {
-        padding: 0.5rem;
-    }
-
-    .summary-label {
-        font-size: 0.7rem;
-    }
-
-    .summary-value {
-        font-size: 1rem;
-    }
-
-    .plan-select-btn {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.7rem;
-    }
-
-    .ratio-badge {
-        padding: 0.15rem 0.4rem;
-        font-size: 0.65rem;
+    .payment-plan-table {
+        min-width: 420px;
     }
 }
