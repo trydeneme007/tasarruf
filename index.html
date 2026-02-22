@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaya Hesaplayıcı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- Üst Çubuk: Logo + Girdiler -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <svg class="logo-icon" width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#10b981" />
+                    <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="#059669" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="top-bar-title">Kaya</span>
+            </div>
+
+            <div class="top-bar-inputs">
+                <div class="top-input">
+                    <label>Hedef Tutar</label>
+                    <div class="input-wrapper">
+                        <span class="currency">₺</span>
+                        <input type="text" id="targetAmount" value="1.000.000">
+                    </div>
+                </div>
+                <div class="top-input">
+                    <label>Başlangıç</label>
+                    <input type="date" id="startMonth">
+                </div>
+                <div class="top-input">
+                    <label>Aylık Ödeme</label>
+                    <div class="input-wrapper">
+                        <span class="currency">₺</span>
+                        <input type="text" id="monthlyPayment" placeholder="Seçin" readonly class="readonly-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gelişmiş Ayarlar + PDF -->
+            <div class="top-bar-adv">
+                <button class="pdf-btn" id="downloadPdfBtn" title="PDF İndir">📄 PDF</button>
+                <button class="adv-btn" id="advancedToggle">⚙️</button>
+            </div>
+        </header>
+
+        <!-- Hızlı Tutar Butonları -->
+        <div class="quick-bar">
+            <button type="button" class="amount-btn" data-val="1000000">1M</button>
+            <button type="button" class="amount-btn" data-val="2000000">2M</button>
+            <button type="button" class="amount-btn" data-val="3000000">3M</button>
+            <button type="button" class="amount-btn" data-val="4000000">4M</button>
+            <button type="button" class="amount-btn" data-val="5000000">5M</button>
+            <button type="button" class="amount-btn" data-val="6000000">6M</button>
+            <button type="button" class="amount-btn" data-val="7000000">7M</button>
+            <button type="button" class="amount-btn" data-val="8000000">8M</button>
+            <button type="button" class="amount-btn" data-val="9000000">9M</button>
+            <button type="button" class="amount-btn" data-val="10000000">10M</button>
+        </div>
+
+        <!-- Gelişmiş Ayarlar Panel -->
+        <div class="advanced-panel" id="advancedSettings" style="display: none;">
+            <div class="adv-grid">
+                <div class="adv-item">
+                    <label>Toplam Vade</label>
+                    <input type="text" id="totalTerm" disabled class="readonly-input">
+                </div>
+                <div class="adv-item">
+                    <label>Teslim Şartı: <span id="deliveryConditionLabel">%40</span></label>
+                    <input type="range" id="deliveryCondition" min="10" max="100" step="1" value="40">
+                </div>
+                <div class="adv-item">
+                    <label>Org. Ücreti: <span id="orgFeeLabel">%7</span></label>
+                    <input type="range" id="orgFee" min="0" max="20" step="1" value="7">
+                </div>
+            </div>
+        </div>
+
+        <!-- Ana İçerik: Plan Tablosu + Özet Yan Yana -->
+        <main class="main-grid">
+
+            <!-- Sol: Plan Tablosu -->
+            <section class="plans-section">
+                <table class="plans-table">
+                    <thead>
+                        <tr>
+                            <th>Ödeme</th>
+                            <th>Teslim</th>
+                            <th>Vade</th>
+                            <th>Oran</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="suggestionsTableBody">
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Sağ: Özet Sonuçlar -->
+            <section class="summary-section" id="summarySection">
+                <div class="summary-card highlight">
+                    <span class="summary-label">Tahmini Teslim</span>
+                    <span class="summary-value" id="resDeliveryMonth">-</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="deliveryProgress" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="summary-row">
+                    <div class="summary-card">
+                        <span class="summary-label">Teslim Eşiği (<span id="resConditionPct">%40</span>)</span>
+                        <span class="summary-value" id="resDeliveryConditionAmt">₺0</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-label">Teslimde Ödenen</span>
+                        <span class="summary-value" id="resPaidAtDelivery">₺0</span>
+                    </div>
+                </div>
+
+                <div class="summary-row">
+                    <div class="summary-card">
+                        <span class="summary-label">Kalan Borç</span>
+                        <span class="summary-value" id="resRemainingDebt">₺0</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="summary-label">Kalan Ay</span>
+                        <span class="summary-value" id="resRemainingMonths">-</span>
+                    </div>
+                </div>
+
+                <div class="summary-extended" id="extendedResults" style="display: none;">
+                    <div class="summary-row">
+                        <div class="summary-card">
+                            <span class="summary-label">Org. Ücreti</span>
+                            <span class="summary-value" id="resOrgFee">₺0</span>
+                        </div>
+                        <div class="summary-card">
+                            <span class="summary-label">Toplam Ödeme</span>
+                            <span class="summary-value" id="resTotalPayment">₺0</span>
+                        </div>
+                    </div>
+                    <div class="summary-card total-cost">
+                        <span class="summary-label">Toplam Maliyet</span>
+                        <span class="summary-value" id="resTotalCost">₺0</span>
+                    </div>
+                </div>
+
+                <div id="warningMessage" class="warning-box" style="display: none;">
+                    <span>⚠️ Teslim koşulu sağlanmıyor!</span>
+                </div>
+
+                <!-- Detaylı Ödeme Planı -->
+                <div class="payment-plan-section" id="paymentPlanSection" style="display: none;">
+                    <div class="payment-plan-header">
+                        <span>📄 Aylık Ödeme Planı</span>
+                    </div>
+                    <div class="payment-plan-scroll">
+                        <table class="payment-plan-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-no">Taksit No</th>
+                                    <th class="col-date">Ödeme Tarihi</th>
+                                    <th class="col-amount">Taksit Tutarı</th>
+                                    <th class="col-cumulative">Toplam Ödenen</th>
+                                    <th class="col-remaining">Kalan Borç</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paymentPlanBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
