@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const targetAmountInput = document.getElementById('targetAmount');
     const monthlyPaymentInput = document.getElementById('monthlyPayment');
     const deliveryConditionInput = document.getElementById('deliveryCondition');
-    const totalTermInput = document.getElementById('totalTerm');
     const orgFeeInput = document.getElementById('orgFee');
     const startMonthInput = document.getElementById('startMonth');
 
@@ -49,16 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const date = new Date(startDateString);
         date.setMonth(date.getMonth() + (monthsToAdd - 1));
 
-        const monthNames = [
-            "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-            "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
-        ];
-
         const day = date.getDate().toString().padStart(2, '0');
-        const month = monthNames[date.getMonth()];
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const year = date.getFullYear();
 
-        return `${day} ${month} ${year}`;
+        return `${day}.${month}.${year}`;
     };
 
     // ── Girdi Olayları ──
@@ -303,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ── Detaylı Ödeme Planı ──
-    function generatePaymentPlanTable(T, A, N, V) {
+    function generatePaymentPlanTable(T, A, N, V, orgFeeTotal) {
         const tbody = document.getElementById('paymentPlanBody');
         const section = document.getElementById('paymentPlanSection');
         if (!tbody || !section) return;
@@ -316,15 +310,37 @@ document.addEventListener('DOMContentLoaded', () => {
         section.style.display = 'block';
         tbody.innerHTML = '';
 
-        let currentBalance = T;
+        let currentBalance = T; // Kalan Borç organizasyon ücretini İÇERMİYOR
         let totalPaid = 0;
 
         for (let i = 1; i <= V; i++) {
             const tr = document.createElement('tr');
             const dateStr = getDeliveryDateString(i, startMonthInput.value);
 
-            totalPaid += A;
-            currentBalance -= A;
+            // Org ücreti payı (Kullanıcı Mantığı)
+            let orgPortion = 0;
+            if (orgFeeTotal > 0) {
+                if (V === 1) {
+                    if (i === 1) orgPortion = orgFeeTotal;
+                } else if (V === 2) {
+                    if (i === 1) orgPortion = Math.round(orgFeeTotal * 5 / 8);
+                    else if (i === 2) orgPortion = orgFeeTotal - Math.round(orgFeeTotal * 5 / 8);
+                } else if (V === 3) {
+                    if (i === 1) orgPortion = Math.round(orgFeeTotal * 5 / 8);
+                    else if (i === 2) orgPortion = Math.round(orgFeeTotal / 8);
+                    else if (i === 3) orgPortion = orgFeeTotal - (Math.round(orgFeeTotal * 5 / 8) + Math.round(orgFeeTotal / 8));
+                } else { // V >= 4
+                    if (i === 1) orgPortion = Math.round(orgFeeTotal * 5 / 8);
+                    else if (i === 2 || i === 3) orgPortion = Math.round(orgFeeTotal / 8);
+                    else if (i === 4) orgPortion = orgFeeTotal - (Math.round(orgFeeTotal * 5 / 8) + 2 * Math.round(orgFeeTotal / 8));
+                }
+            }
+
+            const installmentAmount = A;
+            const monthTotal = installmentAmount + orgPortion;
+
+            totalPaid += installmentAmount; // Ödenen miktara sadece taksit dahil
+            currentBalance -= installmentAmount; // Kalan borçtan sadece taksit düşer
             if (currentBalance < 0) currentBalance = 0;
 
             const isDelivery = (i === N);
@@ -332,10 +348,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isDelivery) tr.classList.add('delivery-row');
             if (i % 2 === 0 && !isDelivery) tr.classList.add('even-row');
 
+            // Taksit sütununa Org. ücretini ekle
+            let installmentDisplay = `₺${formatNumber(installmentAmount)}`;
+            if (orgPortion > 0) {
+                installmentDisplay += `<br><span class="org-plus">+ ₺${formatNumber(orgPortion)}</span>`;
+            }
+
             tr.innerHTML = `
                 <td class="col-no">${i}</td>
                 <td class="col-date">${dateStr}</td>
-                <td class="col-amount">₺${formatNumber(A)}</td>
+                <td class="col-amount"><strong>${installmentDisplay}</strong></td>
+                <td class="col-month-total"><strong>₺${formatNumber(monthTotal)}</strong></td>
                 <td class="col-cumulative">₺${formatNumber(totalPaid)}</td>
                 <td class="col-remaining">₺${formatNumber(currentBalance)}</td>
             `;
@@ -353,9 +376,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let V = 0;
         if (T > 0 && A > 0) {
             V = Math.ceil(T / A);
-            totalTermInput.value = `${V} Ay`;
-        } else {
-            totalTermInput.value = '';
         }
 
         const threshold = T * p;
@@ -422,7 +442,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         generateSuggestionsTable();
-        generatePaymentPlanTable(T, A, N, V);
+        const orgFee = T * orgFeePct;
+        generatePaymentPlanTable(T, A, N, V, orgFee);
     }
 
     function resetResults() {
